@@ -1,2 +1,2 @@
-# Dev_NP_TTA_NewCProc
-beagle comm test program, c++, vstudio, open folder, cmake
+# Dev_BBB_KbdModal
+beagle modal keyboard program, c++, vstudio, open folder, cmake
