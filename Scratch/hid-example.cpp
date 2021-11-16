@@ -31,7 +31,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <poll.h>
 
 /* C */
 #include <stdio.h>
@@ -113,42 +112,32 @@ int main(int argc, char** argv)
 		printf("\tproduct: 0x%04hx\n", info.product);
 	}
 
-	struct pollfd tPollFd;
-	tPollFd.fd = fd;
-	tPollFd.events = POLLIN;
-	tPollFd.revents = 0;
-
 	int count = 0;
-	while (1)
-	{
+	while (1) {
 		/* Get a report from the device */
 		printf("start read******************************************* %d\n", count++);
-		res = poll(&tPollFd, 1, -1);
-		if (tPollFd.revents & POLLIN == 0)
-		{
-			printf("poll error %x\n", tPollFd.revents);
-		}
-		else
-		{
-			res = read(fd, buf, 16);
-			if (res < 0)
-			{
-				perror("read");
+		res = read(fd, buf, 16);
+		if (res < 0) {
+			perror("read");
+			close(fd);
+			fd = open(device, O_RDWR, S_IRUSR | S_IWUSR);
+			if (fd < 0) {
+				perror("Unable to open device");
 				return 1;
 			}
+		}
+		else {
 			printf("read() read %d bytes:\n\t", res);
 			for (i = 0; i < res; i++)
 				printf("%hhx ", buf[i]);
 			puts("\n");
-			if (buf[2] == 8)
-			{
+			if (buf[2] == 8) {
 				close(fd);
 				printf("exit\n");
 				return 0;
 			}
 		}
 	}
-
 	close(fd);
 	return 0;
 }
