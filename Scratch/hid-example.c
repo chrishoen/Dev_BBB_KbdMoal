@@ -274,7 +274,7 @@ int main22(int argc, char **argv)
 	return 0;
 }
 
-const char *
+const char*
 bus_str(int bus)
 {
 	switch (bus) {
