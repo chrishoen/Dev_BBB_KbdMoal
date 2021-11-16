@@ -124,7 +124,7 @@ int main(int argc, char** argv)
 		/* Get a report from the device */
 		printf("start read******************************************* %d\n", count++);
 		res = poll(&tPollFd, 1, -1);
-		if (tPollFd.revents & POLLIN == 0)
+		if (tPollFd.revents != POLLIN)
 		{
 			printf("poll error %x\n", tPollFd.revents);
 		}
