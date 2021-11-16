@@ -127,6 +127,7 @@ int main(int argc, char** argv)
 		if (tPollFd.revents != POLLIN)
 		{
 			printf("poll error %x\n", tPollFd.revents);
+			return 0;
 		}
 		else
 		{
