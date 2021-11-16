@@ -111,7 +111,7 @@ int main(int argc, char** argv)
 		printf("\tvendor: 0x%04hx\n", info.vendor);
 		printf("\tproduct: 0x%04hx\n", info.product);
 	}
-
+#if 0
 	/* Set Feature */
 	buf[0] = 0x9; /* Report Number */
 	buf[1] = 0xff;
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 			printf("%hhx ", buf[i]);
 		puts("\n");
 	}
-
+#endif
 	while (1) {
 		/* Get a report from the device */
 		printf("start read*******************************************\n");
