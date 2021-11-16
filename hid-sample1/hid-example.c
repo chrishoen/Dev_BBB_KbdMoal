@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 
 	/* Open the Device with non-blocking reads. In real life,
 		don't use a hard coded path; use libudev instead. */
-	fd = open(device, O_RDWR);
+	fd = open(device, O_RDWR, S_IRUSR | S_IWUSR);
 
 	if (fd < 0) {
 		perror("Unable to open device");
