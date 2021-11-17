@@ -47,22 +47,28 @@ int main(int argc, char** argv)
 	struct input_event ev;
 	int res;
 	const char* device = "/dev/input/event1";
+	memset(&ev, 0x0, sizeof(ev));
 
 	fd = open(device, O_RDONLY);
 
 	if (fd < 0) {
-		perror("Unable to open device");
+		perror("open");
 		return 1;
 	}
 
-	memset(&ev, 0x0, sizeof(ev));
+	res = ioctl(fd, EVIOCGRAB, 1);
+	if (res < 0)
+	{
+		perror("grab");
+		return 1;
+	}
 
 	int count = 0;
 	while (1)
 	{
 		printf("start read******************************************* %d\n", count++);
 
-		read(fd, &ev, sizeof(ev));
+		res = read(fd, &ev, sizeof(ev));
 		if (res < 0)
 		{
 			perror("read");
