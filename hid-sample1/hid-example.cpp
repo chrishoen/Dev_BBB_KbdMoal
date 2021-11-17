@@ -128,6 +128,15 @@ int main(int argc, char** argv)
 			for (i = 0; i < res; i++) printf("%hhx ", buf[i]);
 			puts("\n");
 			if (buf[2] == 8) break;
+
+			char txbuf[32];
+			memset(txbuf, 0x0, sizeof(txbuf));
+			res = write(fd, txbuf, 8);
+			if (res < 0)
+			{
+				perror("write");
+				return 1;
+			}
 	}
 
 	close(fd);
