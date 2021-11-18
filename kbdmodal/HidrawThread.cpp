@@ -103,7 +103,7 @@ restart:
 
    if (mHidrawFd < 0)
    {
-      perror("ERROR kbd open");
+      perror("ERROR Hidraw open");
       goto restart;
    }
 
@@ -116,20 +116,20 @@ restart:
    tRet = ioctl(mHidrawFd, HIDIOCGRDESCSIZE, &tReportDescSize);
    if (tRet < 0)
    {
-      perror("ERROR kbd HIDIOCGRDESCSIZE");
+      perror("ERROR Hidraw HIDIOCGRDESCSIZE");
       goto restart;
    }
-   printf("Kbd Report Descriptor Size: %d\n", tReportDescSize);
+   printf("Hidraw Report Descriptor Size: %d\n", tReportDescSize);
 
    // Get Report Descriptor.
    tReportDesc.size = tReportDescSize;
    tRet = ioctl(mHidrawFd, HIDIOCGRDESC, &tReportDesc);
    if (tRet < 0)
    {
-      perror("ERROR kbd HIDIOCGRDESC");
+      perror("ERROR Hidraw HIDIOCGRDESC");
       goto restart;
    }
-   printf("Kbd Report Descriptor:\n");
+   printf("Hidraw Report Descriptor:\n");
    for (int i = 0; i < tReportDesc.size; i++) printf("%hhx ", tReportDesc.value[i]);
    printf("\n");
 
@@ -137,28 +137,28 @@ restart:
    tRet = ioctl(mHidrawFd, HIDIOCGRAWNAME(256), tBuffer);
    if (tRet < 0)
    {
-      perror("ERROR kbd HIDIOCGRAWNAME");
+      perror("ERROR Hidraw HIDIOCGRAWNAME");
       goto restart;
    }
-   printf("Kbd Raw Name: %s\n", tBuffer);
+   printf("Hidraw Raw Name: %s\n", tBuffer);
 
    // Get Physical Location. 
    tRet = ioctl(mHidrawFd, HIDIOCGRAWPHYS(256), tBuffer);
    if (tRet < 0)
    {
-      perror("ERROR kbd HIDIOCGRAWPHYS");
+      perror("ERROR Hidraw HIDIOCGRAWPHYS");
       goto restart;
    }
-   printf("Kbd Raw Phys: %s\n", tBuffer);
+   printf("Hidraw Raw Phys: %s\n", tBuffer);
 
    // Get Raw Info.
    tRet = ioctl(mHidrawFd, HIDIOCGRAWINFO, &tDevInfo);
    if (tRet < 0)
    {
-      perror("ERROR kbd HIDIOCGRAWINFO");
+      perror("ERROR Hidraw HIDIOCGRAWINFO");
       goto restart;
    }
-   printf("Kbd Raw Info:\n");
+   printf("Hidraw Raw Info:\n");
    printf("\tbustype: %d\n", tDevInfo.bustype);
    printf("\tvendor:  0x%04hx\n", tDevInfo.vendor);
    printf("\tproduct: 0x%04hx\n", tDevInfo.product);
@@ -170,7 +170,12 @@ restart:
 
    while (!BaseClass::mTerminateFlag)
    {
-      printf("Kbd read report********************************************** %d\n", mReportCount++);
+      printf("Hidraw read report********************************************** %d\n", mReportCount++);
+
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Read report.
 
       // Blocking poll for read or close.
       struct pollfd tPollFd[2];
@@ -184,14 +189,14 @@ restart:
       tRet = poll(&tPollFd[0], 2, -1);
       if (tRet < 0)
       {
-         perror("ERROR kbd poll");
+         perror("ERROR Hidraw poll");
          goto restart;
       }
 
       // Test for close.
       if (tPollFd[1].revents & POLLIN)
       {
-         printf("Kbd read report closed\n");
+         printf("Hidraw read report closed\n");
          goto restart;
       }
 
@@ -199,10 +204,10 @@ restart:
       tRet = read(mHidrawFd, tBuffer, 32);
       if (tRet < 0)
       {
-         perror("ERROR kbd read");
+         perror("ERROR Hidraw read");
          goto restart;
       }
-      printf("Kbd read() read %d bytes:\n\t", tRet);
+      printf("Hidraw read() read %d bytes:\n\t", tRet);
       for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
       puts("\n");
 
@@ -216,11 +221,11 @@ restart:
       int tGadgetFd = gGadgetThread->mGadgetFd;
       if (tGadgetFd <= 0) continue;
 
-      printf("Kbd write report*******\n");
+      printf("Hidraw write report*******\n");
       tRet = write(tGadgetFd, tBuffer, 8);
       if (tRet < 0)
       {
-         perror("ERROR kbd write");
+         perror("ERROR Hidraw write");
       }
    }
 

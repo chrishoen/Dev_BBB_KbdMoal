@@ -20,6 +20,8 @@
 #include <poll.h>
 #include <errno.h>
 
+#include "HidrawThread.h"
+
 #define  _GADGETTHREAD_CPP_
 #include "GadgetThread.h"
 
@@ -58,7 +60,7 @@ void GadgetThread::threadInitFunction()
    mGadgetFd = open(cGadgetDev, O_RDWR, S_IRUSR | S_IWUSR);
    if (mGadgetFd < 0)
    {
-      perror("ERROR gadget open");
+      perror("ERROR Gadget open");
    }
 
    // Open the shutdown event.
@@ -89,7 +91,12 @@ void GadgetThread::threadRunFunction()
 
    while (!BaseClass::mTerminateFlag)
    {
-      printf("Gadget read report******************************************* %d\n", mReportCount++);
+      printf("Gadget read report********************************************* %d\n", mReportCount++);
+
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Read report.
 
       // Blocking poll for read or close.
       struct pollfd tPollFd[2];
@@ -103,7 +110,7 @@ void GadgetThread::threadRunFunction()
       tRet = poll(&tPollFd[0], 2, -1);
       if (tRet < 0)
       {
-         perror("ERROR gadget poll");
+         perror("ERROR Gadget poll");
          return;
       }
 
@@ -114,16 +121,36 @@ void GadgetThread::threadRunFunction()
          return;
       }
 
-      // Not closed, read a report record. 
+      // Not closed, read a report record.
+      memset(tBuffer, 0x0, 32);
       tRet = read(mGadgetFd, tBuffer, 32);
       if (tRet < 0)
       {
-         perror("ERROR gadget read");
+         perror("ERROR Gadget read");
          return;
       }
+
+      int tReportSize = tRet;
       printf("gadget read() read %d bytes:\n\t", tRet);
       for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
       puts("\n");
+
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Write report.
+
+      // Copy the gadget file descriptor.
+      if (gHidrawThread == 0) continue;
+      int tHidrawFd = gHidrawThread->mHidrawFd;
+      if (tHidrawFd <= 0) continue;
+
+      printf("Gadget write report*******\n");
+      tRet = write(tHidrawFd, tBuffer, 8);
+      if (tRet < 0)
+      {
+         perror("ERROR Gadget write");
+      }
    }
 }
 
