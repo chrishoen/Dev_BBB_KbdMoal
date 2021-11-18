@@ -18,9 +18,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <poll.h>
-
 #include <errno.h>
 
+#include "GadgetThread.h"
 
 #define  _KBDTHREAD_CPP_
 #include "KbdThread.h"
@@ -184,7 +184,7 @@ restart:
       tRet = poll(&tPollFd[0], 2, -1);
       if (tRet < 0)
       {
-         perror("poll");
+         perror("ERROR kbd poll");
          goto restart;
       }
 
@@ -199,13 +199,31 @@ restart:
       tRet = read(mHidrawFd, tBuffer, 32);
       if (tRet < 0)
       {
-         perror("read");
+         perror("ERROR kbd read");
          goto restart;
       }
       printf("Kbd read() read %d bytes:\n\t", tRet);
       for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
       puts("\n");
+
+      //************************************************************************
+      //************************************************************************
+      //************************************************************************
+      // Write report.
+
+      // Copy the gadget file descriptor.
+      if (gGadgetThread == 0) continue;
+      int tGadgetFd = gGadgetThread->mGadgetFd;
+      if (tGadgetFd <= 0) continue;
+
+      printf("Kbd write report*******\n");
+      tRet = write(tGadgetFd, tBuffer, 8);
+      if (tRet < 0)
+      {
+         perror("ERROR kbd write");
+      }
    }
+
 }
 
 //******************************************************************************
