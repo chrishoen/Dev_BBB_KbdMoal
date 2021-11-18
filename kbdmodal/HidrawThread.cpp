@@ -22,18 +22,18 @@
 
 #include "GadgetThread.h"
 
-#define  _KBDTHREAD_CPP_
-#include "KbdThread.h"
+#define  _HIDRAWTHREAD_CPP_
+#include "HidrawThread.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Constructor.
 
-KbdThread::KbdThread()
+HidrawThread::HidrawThread()
 {
    // Set base class thread services.
-   BaseClass::setThreadName("Kbd");
+   BaseClass::setThreadName("Hidraw");
    BaseClass::setThreadPriorityHigh();
 
    // Set base class thread priority.
@@ -52,9 +52,9 @@ KbdThread::KbdThread()
 // Thread init function. This is called by the base class immediately
 // after the thread starts running. It initializes something.
 
-void KbdThread::threadInitFunction()
+void HidrawThread::threadInitFunction()
 {
-   printf("KbdThread::threadInitFunction\n");
+   printf("HidrawThread::threadInitFunction\n");
 
    // Open the event.
    mEventFd = eventfd(0, EFD_SEMAPHORE);
@@ -67,7 +67,7 @@ void KbdThread::threadInitFunction()
 // after the thread init function. It runs a loop that waits for the
 // hid keyboard input.
 
-void KbdThread::threadRunFunction()
+void HidrawThread::threadRunFunction()
 {
 restart:
    // Guard.
@@ -232,9 +232,9 @@ restart:
 // Thread exit function. This is called by the base class immediately
 // before the thread is terminated. It shuts down the hid api.
 
-void KbdThread::threadExitFunction()
+void HidrawThread::threadExitFunction()
 {
-   printf("KbdThread::threadExitFunction\n");
+   printf("HidrawThread::threadExitFunction\n");
 }
 
 //******************************************************************************
@@ -243,9 +243,9 @@ void KbdThread::threadExitFunction()
 // Thread shutdown function. This posts to the close event to
 // terminate the thread and it closes the files.
 
-void KbdThread::shutdownThread()
+void HidrawThread::shutdownThread()
 {
-   printf("KbdThread::shutdownThread\n");
+   printf("HidrawThread::shutdownThread\n");
 
    // Request thread run function return.
    mTerminateFlag = true;

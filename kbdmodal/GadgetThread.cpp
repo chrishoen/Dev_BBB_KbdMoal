@@ -90,6 +90,7 @@ void GadgetThread::threadRunFunction()
    while (!BaseClass::mTerminateFlag)
    {
       printf("Gadget read report******************************************* %d\n", mReportCount++);
+
       // Blocking poll for read or close.
       struct pollfd tPollFd[2];
       tPollFd[0].fd = mGadgetFd;

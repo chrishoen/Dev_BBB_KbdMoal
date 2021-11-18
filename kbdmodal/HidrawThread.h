@@ -17,7 +17,7 @@ Kbd hidraw thread.
 // the keyboard, modally translates them, and writes them to the host 
 // via the gadget file descriptor that is owned by the gadget thread.
 
-class KbdThread : public Ris::Threads::BaseThread
+class HidrawThread : public Ris::Threads::BaseThread
 {
 public:
    typedef Ris::Threads::BaseThread BaseClass;
@@ -51,7 +51,7 @@ public:
    // Methods.
 
    // Constructor.
-   KbdThread();
+   HidrawThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -81,10 +81,10 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _KBDTHREAD_CPP_
-           KbdThread* gKbdThread = 0;
+#ifdef _HIDRAWTHREAD_CPP_
+           HidrawThread* gHidrawThread = 0;
 #else
-   extern  KbdThread* gKbdThread;
+   extern  HidrawThread* gHidrawThread;
 #endif
 
 //******************************************************************************

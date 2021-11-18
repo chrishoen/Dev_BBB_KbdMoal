@@ -7,7 +7,7 @@
 #include "risThreadsSynch.h"
 #include "MainInit.h"
 
-#include "KbdThread.h"
+#include "HidrawThread.h"
 #include "GadgetThread.h"
 
 //******************************************************************************
@@ -55,8 +55,8 @@ int main(int argc,char** argv)
 
    if (true)
    {
-      gKbdThread = new KbdThread;
-      gKbdThread->launchThread();
+      gHidrawThread = new HidrawThread;
+      gHidrawThread->launchThread();
    }
 
    //***************************************************************************
@@ -66,7 +66,7 @@ int main(int argc,char** argv)
 
    Ris::Threads::showCurrentThreadInfo();
    if (gGadgetThread) gGadgetThread->showThreadInfo();
-   if (gKbdThread) gKbdThread->showThreadInfo();
+   if (gHidrawThread) gHidrawThread->showThreadInfo();
 
    //***************************************************************************
    //***************************************************************************
@@ -82,7 +82,7 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program threads.
 
-   if (gKbdThread) gKbdThread->shutdownThread();
+   if (gHidrawThread) gHidrawThread->shutdownThread();
    if (gGadgetThread) gGadgetThread->shutdownThread();
 
    //***************************************************************************
@@ -90,10 +90,10 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Delete program threads.
 
-   if (gKbdThread)
+   if (gHidrawThread)
    {
-      delete gKbdThread;
-      gKbdThread = 0;
+      delete gHidrawThread;
+      gHidrawThread = 0;
    }
 
    if (gGadgetThread)
