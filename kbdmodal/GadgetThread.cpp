@@ -130,7 +130,7 @@ void GadgetThread::threadRunFunction()
 //******************************************************************************
 //******************************************************************************
 // Thread exit function. This is called by the base class immediately
-// before the thread is terminated. It shuts down the hid api.
+// before the thread is terminated.
 
 void GadgetThread::threadExitFunction()
 {
@@ -158,7 +158,7 @@ void GadgetThread::shutdownThread()
    // Wait for the thread to terminate.
    BaseClass::waitForThreadTerminate();
 
-   // Close the hidraw file if it is open.
+   // Close the gadget file if it is open.
    if (mGadgetFd > 0)
    {
       close(mGadgetFd);

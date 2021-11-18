@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Kbd hidraw thread.
+Kbd gadget thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -12,7 +12,7 @@ Kbd hidraw thread.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a thread that processes the hidraw inputs from the keyboard.
+// This is a thread that processes the gadget inputs from the host.
 
 class GadgetThread : public Ris::Threads::BaseThread
 {
@@ -24,7 +24,7 @@ public:
    //***************************************************************************
    // Constants.
 
-   // Device path for hidraw.
+   // Device path for gadget.
    const char* cGadgetDev = "/dev/hidg0";
 
    //***************************************************************************
@@ -32,7 +32,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // File descriptor for hidraw.
+   // File descriptor for gadget.
    int mGadgetFd;
 
    // File descriptor for event semaphore used for close.
