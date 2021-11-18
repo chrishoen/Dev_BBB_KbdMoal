@@ -13,6 +13,9 @@ Kbd gadget thread.
 //******************************************************************************
 //******************************************************************************
 // This is a thread that processes the gadget inputs from the host.
+// It owns the gadget file descriptor. It reads the gadget inputs from
+// the host and writes them to the hidraw via the hidraw file descriptor
+// that is owned by the kbd thread.
 
 class GadgetThread : public Ris::Threads::BaseThread
 {
