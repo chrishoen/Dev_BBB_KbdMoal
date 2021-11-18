@@ -8,6 +8,7 @@
 #include "MainInit.h"
 
 #include "KbdThread.h"
+#include "GadgetThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -46,8 +47,17 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Launch program threads.
 
-   gKbdThread = new KbdThread;
-   gKbdThread->launchThread();
+   if (true)
+   {
+      gGadgetThread = new GadgetThread;
+      gGadgetThread->launchThread();
+   }
+
+   if (false)
+   {
+      gKbdThread = new KbdThread;
+      gKbdThread->launchThread();
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -55,6 +65,7 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
+   if (gGadgetThread) gGadgetThread->showThreadInfo();
    if (gKbdThread) gKbdThread->showThreadInfo();
 
    //***************************************************************************
@@ -72,6 +83,7 @@ int main(int argc,char** argv)
    // Shutdown program threads.
 
    if (gKbdThread) gKbdThread->shutdownThread();
+   if (gGadgetThread) gGadgetThread->shutdownThread();
 
    //***************************************************************************
    //***************************************************************************
@@ -82,6 +94,12 @@ int main(int argc,char** argv)
    {
       delete gKbdThread;
       gKbdThread = 0;
+   }
+
+   if (gGadgetThread)
+   {
+      delete gGadgetThread;
+      gGadgetThread = 0;
    }
 
    //***************************************************************************
