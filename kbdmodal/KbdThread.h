@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Exampleple timer thread.
+Kbd hidraw thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -12,8 +12,7 @@ Exampleple timer thread.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is an example timer thread. It inherits from the timer thread base
-// class. It executes a function periodically.
+// This is a thread that processes the hidraw inputs from the keyboard.
 
 class KbdThread : public Ris::Threads::BaseThread
 {
@@ -52,8 +51,8 @@ public:
    //***************************************************************************
    // Methods. Base class overloads.
 
-   // Thread init function. This is called by the base class immediately 
-   // after the thread starts running. It initializes the hid api.
+   // Thread init function. This is called by the base class immediately
+   // after the thread starts running. It initializes something.
    void threadInitFunction() override;
 
    // Thread run function. This is called by the base class immediately
@@ -62,11 +61,11 @@ public:
    void threadRunFunction() override;
 
    // Thread exit function. This is called by the base class immediately
-   // before the thread is terminated. It shuts down the hid api.
+   // before the thread is terminated. It is a placeholder.
    void threadExitFunction() override;
 
-   // Thread shutdown function. It shuts down the hid api and terminates
-   // the thread.
+   // Thread shutdown function. This posts to the close event to
+   // terminate the thread and it closes the files.
    void shutdownThread() override;
 };
 

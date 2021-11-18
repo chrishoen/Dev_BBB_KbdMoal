@@ -47,8 +47,8 @@ KbdThread::KbdThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread init function. This is called by the base class immediately 
-// after the thread starts running. It initializes the hid api.
+// Thread init function. This is called by the base class immediately
+// after the thread starts running. It initializes something.
 
 void KbdThread::threadInitFunction()
 {
@@ -221,28 +221,30 @@ void KbdThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread shutdown function. It shuts down the hid api and terminates
-// the thread.
+// Thread shutdown function. This posts to the close event to
+// terminate the thread and it closes the files.
+
 void KbdThread::shutdownThread()
 {
    printf("KbdThread::shutdownThread22\n");
+
    // Request thread run function return.
    mTerminateFlag = true;
 
-   // Write bytes to the event semaphore to signal a close.
+   // Write bytes to the event semaphore to signal a close. This will
+   // cause the thread to terminate.
    unsigned long long tCount = 1;
    write(mEventFd, &tCount, 8);
 
-   // If the hidraw file is open then close it. This will cause any
-   // pending reads to fail and the thread run function will return.
+   // Wait for the thread to terminate.
+   BaseClass::waitForThreadTerminate();
+
+   // Close the hidraw file if it is open.
    if (mHidrawFd > 0)
    {
       close(mHidrawFd);
       mHidrawFd = -1;
    }
-
-   // Wait for the thread to terminate.
-   BaseClass::waitForThreadTerminate();
 
    // Close the event semaphore.
    close(mEventFd);
