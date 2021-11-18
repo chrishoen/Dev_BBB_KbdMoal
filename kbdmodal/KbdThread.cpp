@@ -41,7 +41,9 @@ KbdThread::KbdThread()
 
    // Initialize variables.
    mHidrawFd = -1;
-
+   mEventFd = -1;
+   mErrorCount = 0;
+   mReportCount = 0;
 }
 
 //******************************************************************************
@@ -166,10 +168,9 @@ restart:
    //***************************************************************************
    // Read report.
 
-   int tReportCount = 0;
    while (!BaseClass::mTerminateFlag)
    {
-      printf("Read report******************************************* %d\n", tReportCount++);
+      printf("Read report******************************************* %d\n", mReportCount++);
 
       // Blocking poll for read or close.
       struct pollfd tPollFd[2];
@@ -190,11 +191,11 @@ restart:
       // Test for close.
       if (tPollFd[1].revents & POLLIN)
       {
-         printf("read report closed %d\n", tRet);
+         printf("read report closed\n");
          goto restart;
       }
 
-      // Read a record. 
+      // Not closed, read a report record. 
       tRet = read(mHidrawFd, tBuffer, 32);
       if (tRet < 0)
       {
@@ -226,7 +227,7 @@ void KbdThread::threadExitFunction()
 
 void KbdThread::shutdownThread()
 {
-   printf("KbdThread::shutdownThread22\n");
+   printf("KbdThread::shutdownThread\n");
 
    // Request thread run function return.
    mTerminateFlag = true;
