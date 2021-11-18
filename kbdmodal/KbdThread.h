@@ -23,7 +23,21 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Constants.
+
+   // Device path for hidraw.
+   const char* cHidrawDev = "/dev/hidraw0";
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members.
+
+   // File descriptor for hidraw.
+   int mHidrawFd;
+
+   // File descriptor for event semaphore used for close.
+   int mEventFd;
 
    //***************************************************************************
    //***************************************************************************
@@ -50,6 +64,10 @@ public:
    // Thread exit function. This is called by the base class immediately
    // before the thread is terminated. It shuts down the hid api.
    void threadExitFunction() override;
+
+   // Thread shutdown function. It shuts down the hid api and terminates
+   // the thread.
+   void shutdownThread() override;
 };
 
 //******************************************************************************
@@ -58,7 +76,7 @@ public:
 // Global instance.
 
 #ifdef _KBDTHREAD_CPP_
-           KbdThread* gKbdThread;
+           KbdThread* gKbdThread = 0;
 #else
    extern  KbdThread* gKbdThread;
 #endif
