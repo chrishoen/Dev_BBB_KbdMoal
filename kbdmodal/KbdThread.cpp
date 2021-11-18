@@ -194,6 +194,7 @@ restart:
          goto restart;
       }
 
+      // Read a record. 
       tRet = read(mHidrawFd, tBuffer, 32);
       if (tRet < 0)
       {
