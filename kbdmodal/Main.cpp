@@ -36,6 +36,7 @@ int main(int argc,char** argv)
    // Begin program.
  
    // Register signal handler.
+   signal(SIGINT, sig_handler);
    signal(SIGTERM, sig_handler);
 
    // Initialize program resources.
