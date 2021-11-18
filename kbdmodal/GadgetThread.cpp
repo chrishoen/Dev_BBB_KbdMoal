@@ -33,7 +33,7 @@
 GadgetThread::GadgetThread()
 {
    // Set base class thread services.
-   BaseClass::setThreadName("Kbd");
+   BaseClass::setThreadName("Gadget");
    BaseClass::setThreadPriorityHigh();
 
    // Set base class thread priority.
@@ -56,7 +56,14 @@ void GadgetThread::threadInitFunction()
 {
    printf("GadgetThread::threadInitFunction\n");
 
-   // Open the event.
+   // Open the file.
+   mGadgetFd = open(cGadgetDev, O_RDWR, S_IRUSR | S_IWUSR);
+   if (mGadgetFd < 0)
+   {
+      perror("ERROR gadget open");
+   }
+
+   // Open the shutdown event.
    mEventFd = eventfd(0, EFD_SEMAPHORE);
 }
 
@@ -69,20 +76,6 @@ void GadgetThread::threadInitFunction()
 
 void GadgetThread::threadRunFunction()
 {
-restart:
-   // Guard.
-   if (mTerminateFlag) return;
-
-   // Sleep.
-   BaseClass::threadSleep(250);
-
-   // If the hidraw file is open then close it.
-   if (mGadgetFd > 0)
-   {
-      close(mGadgetFd);
-      mGadgetFd = -1;
-   }
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -94,55 +87,45 @@ restart:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Open hidraw file.
-
-   mGadgetFd = open(cGadgetDev, O_RDWR, S_IRUSR | S_IWUSR);
-
-   if (mGadgetFd < 0)
-   {
-      perror("open");
-      goto restart;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Read report.
 
    while (!BaseClass::mTerminateFlag)
    {
-      printf("Write report******************************************* %d\n", mReportCount++);
+      printf("Gadget read report******************************************* %d\n", mReportCount++);
 
-      tBuffer[0] = 0;
-      tBuffer[1] = 0;
-      tBuffer[2] = 0x1d;
-      tBuffer[3] = 0;
-      tBuffer[4] = 0;
-      tBuffer[5] = 0;
-      tBuffer[6] = 0;
-      tBuffer[7] = 0;
+      // Blocking poll for read or close.
+      struct pollfd tPollFd[2];
+      tPollFd[0].fd = mGadgetFd;
+      tPollFd[0].events = POLLIN;
+      tPollFd[0].revents = 0;
+      tPollFd[1].fd = mEventFd;
+      tPollFd[1].events = POLLIN;
+      tPollFd[1].revents = 0;
 
-      // Write a report record. 
-      tBuffer[2] = 0x1d;
-      tRet = write(mGadgetFd, tBuffer, 8);
+      tRet = poll(&tPollFd[0], 2, -1);
       if (tRet < 0)
       {
-         perror("ERROR write ");
-         goto restart;
+         perror("ERROR gadget poll");
+         return;
       }
-      // Sleep.
-      threadSleep(200);
 
-      // Write a report record. 
-      tBuffer[2] = 0x00;
-      tRet = write(mGadgetFd, tBuffer, 8);
+      // Test for close.
+      if (tPollFd[1].revents & POLLIN)
+      {
+         printf("gadget read report closed\n");
+         return;
+      }
+
+      // Not closed, read a report record. 
+      tRet = read(mGadgetFd, tBuffer, 32);
       if (tRet < 0)
       {
-         perror("ERROR write ");
-         goto restart;
+         perror("ERROR gadget read");
+         return;
       }
-      // Sleep.
-      threadSleep(800);
+      printf("gadget read() read %d bytes:\n\t", tRet);
+      for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
+      puts("\n");
    }
 }
 

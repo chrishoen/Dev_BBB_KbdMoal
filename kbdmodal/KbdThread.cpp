@@ -103,7 +103,7 @@ restart:
 
    if (mHidrawFd < 0)
    {
-      perror("open");
+      perror("ERROR kbd open");
       goto restart;
    }
 
@@ -116,20 +116,20 @@ restart:
    tRet = ioctl(mHidrawFd, HIDIOCGRDESCSIZE, &tReportDescSize);
    if (tRet < 0)
    {
-      perror("HIDIOCGRDESCSIZE");
+      perror("ERROR kbd HIDIOCGRDESCSIZE");
       goto restart;
    }
-   printf("Report Descriptor Size: %d\n", tReportDescSize);
+   printf("Kbd Report Descriptor Size: %d\n", tReportDescSize);
 
    // Get Report Descriptor.
    tReportDesc.size = tReportDescSize;
    tRet = ioctl(mHidrawFd, HIDIOCGRDESC, &tReportDesc);
    if (tRet < 0)
    {
-      perror("HIDIOCGRDESC");
+      perror("ERROR kbd HIDIOCGRDESC");
       goto restart;
    }
-   printf("Report Descriptor:\n");
+   printf("Kbd Report Descriptor:\n");
    for (int i = 0; i < tReportDesc.size; i++) printf("%hhx ", tReportDesc.value[i]);
    printf("\n");
 
@@ -137,28 +137,28 @@ restart:
    tRet = ioctl(mHidrawFd, HIDIOCGRAWNAME(256), tBuffer);
    if (tRet < 0)
    {
-      perror("HIDIOCGRAWNAME");
+      perror("ERROR kbd HIDIOCGRAWNAME");
       goto restart;
    }
-   printf("Raw Name: %s\n", tBuffer);
+   printf("Kbd Raw Name: %s\n", tBuffer);
 
    // Get Physical Location. 
    tRet = ioctl(mHidrawFd, HIDIOCGRAWPHYS(256), tBuffer);
    if (tRet < 0)
    {
-      perror("HIDIOCGRAWPHYS");
+      perror("ERROR kbd HIDIOCGRAWPHYS");
       goto restart;
    }
-   printf("Raw Phys: %s\n", tBuffer);
+   printf("Kbd Raw Phys: %s\n", tBuffer);
 
    // Get Raw Info.
    tRet = ioctl(mHidrawFd, HIDIOCGRAWINFO, &tDevInfo);
    if (tRet < 0)
    {
-      perror("HIDIOCGRAWINFO");
+      perror("ERROR kbd HIDIOCGRAWINFO");
       goto restart;
    }
-   printf("Raw Info:\n");
+   printf("Kbd Raw Info:\n");
    printf("\tbustype: %d\n", tDevInfo.bustype);
    printf("\tvendor:  0x%04hx\n", tDevInfo.vendor);
    printf("\tproduct: 0x%04hx\n", tDevInfo.product);
@@ -170,7 +170,7 @@ restart:
 
    while (!BaseClass::mTerminateFlag)
    {
-      printf("Read report******************************************* %d\n", mReportCount++);
+      printf("Kbd read report********************************************** %d\n", mReportCount++);
 
       // Blocking poll for read or close.
       struct pollfd tPollFd[2];
@@ -191,7 +191,7 @@ restart:
       // Test for close.
       if (tPollFd[1].revents & POLLIN)
       {
-         printf("read report closed\n");
+         printf("Kbd read report closed\n");
          goto restart;
       }
 
@@ -202,7 +202,7 @@ restart:
          perror("read");
          goto restart;
       }
-      printf("read() read %d bytes:\n\t", tRet);
+      printf("Kbd read() read %d bytes:\n\t", tRet);
       for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
       puts("\n");
    }

@@ -53,7 +53,7 @@ int main(int argc,char** argv)
       gGadgetThread->launchThread();
    }
 
-   if (false)
+   if (true)
    {
       gKbdThread = new KbdThread;
       gKbdThread->launchThread();
