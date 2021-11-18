@@ -35,6 +35,7 @@ KbdThread::KbdThread()
 
 void KbdThread::threadInitFunction()
 {
+   printf("KbdThread::threadInitFunction\n");
 }
 
 //******************************************************************************
@@ -46,6 +47,10 @@ void KbdThread::threadInitFunction()
 
 void KbdThread::threadRunFunction()
 {
+   while (!BaseClass::mTerminateFlag)
+   {
+      BaseClass::threadSleep(1000);
+   }
 }
 
 //******************************************************************************
@@ -56,6 +61,7 @@ void KbdThread::threadRunFunction()
 
 void KbdThread::threadExitFunction()
 {
+   printf("KbdThread::threadExitFunction\n");
 }
 
 //******************************************************************************
