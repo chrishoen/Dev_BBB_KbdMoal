@@ -9,12 +9,11 @@ include(MyLocalImports.cmake)
 project ("Dev_BBB_KbdModal")
 my_init_global_import_variables()
 
+add_subdirectory ("kbdmodal")
+return()
+
 add_subdirectory ("hid-sample1")
 return()
-
-add_subdirectory ("mytty1")
-return()
-
 
 add_subdirectory ("CommonLib")
 add_subdirectory ("ExampleThread1")
