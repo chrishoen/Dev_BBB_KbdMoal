@@ -48,8 +48,8 @@ static const int cKbdCode_Space = 0x2c;
 static const int cKbdCode_W = 0x1a;
 static const int cKbdCode_E = 0x08;
 static const int cKbdCode_R = 0x15;
-static const int cKbdCode_Y = 0x1c;
 
+static const int cKbdCode_Y = 0x1c;
 static const int cKbdCode_U = 0x18;
 static const int cKbdCode_I = 0x0c;
 static const int cKbdCode_O = 0x12;
@@ -69,13 +69,13 @@ static const int cKbdCode_Comma = 0x36;
 static const int cKbdCode_Period = 0x37;
 
 static const int cKbdCode_Home = 0x4a;
-static const int cKbdCode_LArrow = 0x50;
-static const int cKbdCode_RArrow = 0x4f;
+static const int cKbdCode_LeftArrow = 0x50;
+static const int cKbdCode_RightArrow = 0x4f;
 static const int cKbdCode_End = 0x4d;
-static const int cKbdCode_UArrow = 0x52;
-static const int cKbdCode_DArrow = 0x51;
-static const int cKbdCode_PgUp = 0x4b;
-static const int cKbdCode_PgDown = 0x4e;
+static const int cKbdCode_UpArrow = 0x52;
+static const int cKbdCode_DownArrow = 0x51;
+static const int cKbdCode_PageUp = 0x4b;
+static const int cKbdCode_PageDown = 0x4e;
 
 static const int cKbdCode_Esc = 0x29;
 static const int cKbdCode_Delete = 0x4c;
