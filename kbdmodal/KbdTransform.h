@@ -35,6 +35,7 @@ public:
    // If true then set the ReportB modifier control, alt, shift bits.
    bool mSpecCtrl;
    bool mSpecAlt;
+   bool mSpecGui;
    bool mSpecShift;
 
    // Intermediate temporary report.

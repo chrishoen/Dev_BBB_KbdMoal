@@ -27,6 +27,7 @@ void KbdTransform::reset()
    mLastSpecMode = false;
    mSpecCtrl = false;
    mSpecAlt = false;
+   mSpecGui = false;
    mSpecShift = false;
    memset(mSpecReport, 0, 8);
 }
@@ -88,6 +89,7 @@ void KbdTransform::doProcessINForSpecial(const char* aReportA)
    }
    mSpecCtrl = false;
    mSpecAlt = false;
+   mSpecGui = false;
    mSpecShift = false;
 }
 
@@ -105,8 +107,9 @@ char KbdTransform::doTransformINReportKey(int aKeyIndex)
 
    switch (tKeyA)
    {
-   case cKbdCode_D: mSpecAlt = true; break;
-   case cKbdCode_F: mSpecCtrl = true; break;
+   case cKbdCode_S: mSpecGui = true; break;
+   case cKbdCode_D: mSpecCtrl = true; break;
+   case cKbdCode_F: mSpecAlt = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
 
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;
@@ -162,8 +165,9 @@ char KbdTransform::doTransformINReportModifier()
 {
    char tModifierB = mSpecReport[0];
 
-   if (mSpecCtrl) tModifierB |= cKbdMod_LCtrl;
    if (mSpecAlt) tModifierB |= cKbdMod_LAlt;
+   if (mSpecCtrl) tModifierB |= cKbdMod_LCtrl;
+   if (mSpecGui) tModifierB |= cKbdMod_LGui;
    if (mSpecShift) tModifierB |= cKbdMod_LShift;
 
    return tModifierB;

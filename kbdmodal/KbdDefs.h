@@ -55,6 +55,7 @@ static const int cKbdCode_I = 0x0c;
 static const int cKbdCode_O = 0x12;
 static const int cKbdCode_P = 0x13;
 
+static const int cKbdCode_S = 0x16;
 static const int cKbdCode_D = 0x07;
 static const int cKbdCode_F = 0x09;
 
