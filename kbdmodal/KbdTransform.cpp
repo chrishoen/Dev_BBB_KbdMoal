@@ -24,7 +24,11 @@ KbdTransform::KbdTransform()
 void KbdTransform::reset()
 {
    mSpecMode = false;
+   mLastSpecMode = false;
    mSpecCtrl = false;
+   mSpecAlt = false;
+   mSpecShift = false;
+   memset(mSpecReport, 0, 8);
 }
 
 //******************************************************************************
@@ -69,7 +73,7 @@ void KbdTransform::doProcessINForSpecial(const char* aReportA)
 
    mLastSpecMode = mSpecMode;
    mSpecMode = false;
-   mSpecShift = false;
+
    int j = 2;
    for (int i = 2; i < 8; i++)
    {
@@ -101,6 +105,10 @@ char KbdTransform::doTransformINReportKey(int aKeyIndex)
 
    switch (tKeyA)
    {
+   case cKbdCode_D: mSpecAlt = true; break;
+   case cKbdCode_F: mSpecCtrl = true; break;
+   case cKbdCode_Space: mSpecShift = true; break;
+
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;
    case cKbdCode_E: tKeyB = cKbdCode_C; mSpecCtrl = true; break;
    case cKbdCode_R: tKeyB = cKbdCode_V; mSpecCtrl = true; break;
@@ -110,9 +118,6 @@ char KbdTransform::doTransformINReportKey(int aKeyIndex)
    case cKbdCode_I: tKeyB = cKbdCode_Delete; break;
    case cKbdCode_O: tKeyB = cKbdCode_Insert; break;
    case cKbdCode_P: tKeyB = cKbdCode_Dash; break;
-
-   case cKbdCode_D: mSpecAlt = true; break;
-   case cKbdCode_F: mSpecCtrl = true; break;
 
    case cKbdCode_H: tKeyB = cKbdCode_Home; break;
    case cKbdCode_J: tKeyB = cKbdCode_LeftArrow; break;

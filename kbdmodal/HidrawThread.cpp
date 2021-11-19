@@ -21,6 +21,7 @@
 #include <errno.h>
 
 #include "GadgetThread.h"
+#include "Kbdtransform.h"
 
 #define  _HIDRAWTHREAD_CPP_
 #include "HidrawThread.h"
@@ -208,8 +209,7 @@ restart:
          goto restart;
       }
       printf("Hidraw read() read %d bytes:\n\t", tRet);
-      for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
-      puts("\n");
+      for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]); puts("\n");
 
       //************************************************************************
       //************************************************************************
@@ -221,10 +221,14 @@ restart:
       int tGadgetFd = gGadgetThread->mGadgetFd;
       if (tGadgetFd <= 0) continue;
 
-      continue;
+      // Transform the read report to a write report.
+      char tReportB[32];
+      gKbdTransform.doTransformINReport(tBuffer, tReportB);
+      printf("\t"); for (int i = 0; i < 8; i++) printf("%hhx ", tReportB[i]); puts("\n");
 
+      // Write the transformed report to the host via the gadget.
       printf("Hidraw write report*******\n");
-      tRet = write(tGadgetFd, tBuffer, 8);
+      tRet = write(tGadgetFd, tReportB, 8);
       if (tRet < 0)
       {
          perror("ERROR Hidraw write");

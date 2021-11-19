@@ -38,7 +38,7 @@ public:
    bool mSpecShift;
 
    // Intermediate temporary report.
-   char mSpecReport[8];
+   char mSpecReport[16];
 
    //***************************************************************************
    //***************************************************************************
@@ -86,7 +86,7 @@ public:
 #ifdef _KBDTRANSFORM_CPP_
            KbdTransform gKbdTransform;
 #else
-   extern  KbdTransform* gKbdTransform;
+   extern  KbdTransform gKbdTransform;
 #endif
 
 //******************************************************************************
