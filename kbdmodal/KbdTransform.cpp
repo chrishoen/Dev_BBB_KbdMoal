@@ -44,14 +44,14 @@ void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
       return;
    }
 
+   memset(aReportB, 0, 8);
    for (int i = 2; i < 8; i++)
    {
-      aReportB[i] = doTransformINReportKey(aReportB[i]);
+      aReportB[i] = doTransformINReportKey(i);
    }
+   doRemoveINReportZeroes();
 
-   aReportB[0] = doTransformINReportModifier(mSpecReport[0]);
-   aReportB[1] = 0;
-
+   aReportB[0] = doTransformINReportModifier();
 }
 
 //******************************************************************************
@@ -77,10 +77,6 @@ void KbdTransform::doProcessINForSpecial(const char* aReportA)
       {
          mSpecMode = true;
       }
-      else if (aReportA[i] == cKbdCode_Space)
-      {
-         mSpecShift = true;
-      }
       else
       {
          mSpecReport[j++] = aReportA[i];
@@ -98,11 +94,12 @@ void KbdTransform::doProcessINForSpecial(const char* aReportA)
 // Apply a function, KeyA->KeyB, that depends on the mode.
 // Return KeyB.
 
-char KbdTransform::doTransformINReportKey(char aKeyA)
+char KbdTransform::doTransformINReportKey(int aKeyIndex)
 {
+   char tKeyA = mSpecReport[aKeyIndex];
    char tKeyB = 0;
 
-   switch (aKeyA)
+   switch (tKeyA)
    {
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;
    case cKbdCode_E: tKeyB = cKbdCode_C; mSpecCtrl = true; break;
@@ -126,6 +123,7 @@ char KbdTransform::doTransformINReportKey(char aKeyA)
    case cKbdCode_M: tKeyB = cKbdCode_DownArrow; break;
    case cKbdCode_Comma: tKeyB = cKbdCode_PageUp; break;
    case cKbdCode_Period: tKeyB = cKbdCode_PageDown; break;
+   case cKbdCode_X: tKeyB = cKbdCode_Caps; break;
    }
    return tKeyB;
 }
@@ -134,14 +132,36 @@ char KbdTransform::doTransformINReportKey(char aKeyA)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Remove empty zero key codes from member report.
+
+void KbdTransform::doRemoveINReportZeroes()
+{
+   int j = 2;
+   for (int i = 2; i < 8; i++)
+   {
+      if (mSpecReport[i])
+      {
+         mSpecReport[j++] = mSpecReport[i];
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Transform an IN report modifier byte.
 // Apply a function, ModifierA->ModifierB, that depends on the mode.
 // Return ModiferB.
 
-char KbdTransform::doTransformINReportModifier(char aModifierA)
+char KbdTransform::doTransformINReportModifier()
 {
-   return 0;
+   char tModifierB = mSpecReport[0];
 
+   if (mSpecCtrl) tModifierB |= cKbdMod_LCtrl;
+   if (mSpecAlt) tModifierB |= cKbdMod_LAlt;
+   if (mSpecShift) tModifierB |= cKbdMod_LShift;
+
+   return tModifierB;
 }
 
 //******************************************************************************

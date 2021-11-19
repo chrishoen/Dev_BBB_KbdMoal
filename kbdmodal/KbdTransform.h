@@ -63,15 +63,19 @@ public:
    // caps lock special logic. 
    void doProcessINForSpecial(const char* aReportA);
 
-   // Transform an IN report modifier byte.
-   // Apply a function, ModifierA->ModifierB, that depends on the mode.
-   // Return ModiferB.
-   char doTransformINReportModifier(char aModifierA);
-
    // Transform an IN report key code byte.
    // Apply a function, KeyA->KeyB, that depends on the mode.
    // Return KeyB.
-   char doTransformINReportKey(char aKeyA);
+   char doTransformINReportKey(int aKeyIndex);
+
+   // Remove empty zero key codes from member report.
+   void doRemoveINReportZeroes();
+
+   // Transform an IN report modifier byte.
+   // Apply a function, ModifierA->ModifierB, that depends on the mode.
+   // Return ModiferB.
+   char doTransformINReportModifier();
+
 };
 
 //******************************************************************************
