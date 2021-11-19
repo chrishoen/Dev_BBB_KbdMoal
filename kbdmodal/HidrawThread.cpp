@@ -221,6 +221,8 @@ restart:
       int tGadgetFd = gGadgetThread->mGadgetFd;
       if (tGadgetFd <= 0) continue;
 
+      continue;
+
       printf("Hidraw write report*******\n");
       tRet = write(tGadgetFd, tBuffer, 8);
       if (tRet < 0)

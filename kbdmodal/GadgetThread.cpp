@@ -145,6 +145,8 @@ void GadgetThread::threadRunFunction()
       int tHidrawFd = gHidrawThread->mHidrawFd;
       if (tHidrawFd <= 0) continue;
 
+      continue;
+
       printf("Gadget write report*******\n");
       tRet = write(tHidrawFd, tBuffer, 8);
       if (tRet < 0)
