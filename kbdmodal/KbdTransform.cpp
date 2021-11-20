@@ -107,9 +107,10 @@ char KbdTransform::doTransformINReportKey(int aKeyIndex)
 
    switch (tKeyA)
    {
-   case cKbdCode_S: mSpecGui = true; break;
+   case cKbdCode_A: tKeyB = cKbdCode_LeftArrow; mSpecGui = true; mSpecCtrl = true; break;
+   case cKbdCode_S: tKeyB = cKbdCode_RightArrow; mSpecGui = true; mSpecCtrl = true; break;
+
    case cKbdCode_D: mSpecCtrl = true; break;
-   case cKbdCode_F: mSpecAlt = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
 
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;
