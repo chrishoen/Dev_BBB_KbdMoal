@@ -11,7 +11,21 @@ Kbd modal transformation.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class provides a modal keyboard transformation.
+// This class provides a modal keyboard transformation for key codes
+// and modifier bits. It supplies a function that operates on hid keyboard
+// reports (ReportA->ReportB).
+//
+// If the caps lock key is not pressed then the mode is normal and
+// an identify transformation is applied, all key codes and modifier
+// bits are returned with no changes.
+//
+// If the caps lock key is pressed then the mode is special and
+// a different transformation is applied, some key codes and modifier
+// bits are returned with changes and some are ignored.
+// 
+// An example of this is pressing caps lock and 'u' produces an
+// up arrow and caps lock and 'm' produces a down arrow.
+// 
 
 class KbdTransform
 {
@@ -30,7 +44,6 @@ public:
    // If false then the mode is normal. If true then the mode is special.
    // The mode is special when the caps lock key is pressed.
    bool mSpecMode;
-   bool mLastSpecMode;
 
    // If true then set the ReportB modifier control, alt, shift bits.
    bool mSpecCtrl;

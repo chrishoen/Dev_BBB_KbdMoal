@@ -24,7 +24,6 @@ KbdTransform::KbdTransform()
 void KbdTransform::reset()
 {
    mSpecMode = false;
-   mLastSpecMode = false;
    mSpecCtrl = false;
    mSpecAlt = false;
    mSpecGui = false;
@@ -72,7 +71,6 @@ void KbdTransform::doProcessINForSpecial(const char* aReportA)
    memset(mSpecReport, 0, 8);
    mSpecReport[0] = aReportA[0];
 
-   mLastSpecMode = mSpecMode;
    mSpecMode = false;
 
    int j = 2;
