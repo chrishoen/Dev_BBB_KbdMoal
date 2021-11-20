@@ -208,8 +208,9 @@ restart:
          perror("ERROR Hidraw read");
          goto restart;
       }
-      printf("Hidraw read() read %d bytes:\n\t", tRet);
-      for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]); puts("\n");
+      printf("Hidraw <<<<<<<<< ");
+      for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
+      printf("\n");
 
       //************************************************************************
       //************************************************************************
@@ -224,10 +225,11 @@ restart:
       // Transform the read report to a write report.
       char tReportB[32];
       gKbdTransform.doTransformINReport(tBuffer, tReportB);
-      printf("\t"); for (int i = 0; i < 8; i++) printf("%hhx ", tReportB[i]); puts("\n");
+      printf("Hidraw           ");
+      for (int i = 0; i < tRet; i++) printf("%hhx ", tReportB[i]);
+      printf("\n");
 
       // Write the transformed report to the host via the gadget.
-      printf("Hidraw write report*******\n");
       tRet = write(tGadgetFd, tReportB, 8);
       if (tRet < 0)
       {

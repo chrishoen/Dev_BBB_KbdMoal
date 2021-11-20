@@ -131,9 +131,9 @@ void GadgetThread::threadRunFunction()
       }
 
       int tReportSize = tRet;
-      printf("gadget read() read %d bytes:\n\t", tRet);
+      printf("Gadget >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ");
       for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
-      puts("\n");
+      printf("\n");
 
       //************************************************************************
       //************************************************************************
@@ -145,9 +145,6 @@ void GadgetThread::threadRunFunction()
       int tHidrawFd = gHidrawThread->mHidrawFd;
       if (tHidrawFd <= 0) continue;
 
-      continue;
-
-      printf("Gadget write report*******\n");
       tRet = write(tHidrawFd, tBuffer, 8);
       if (tRet < 0)
       {
