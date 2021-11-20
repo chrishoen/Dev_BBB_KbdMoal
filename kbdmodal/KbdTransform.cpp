@@ -107,6 +107,7 @@ char KbdTransform::doTransformINReportKey(int aKeyIndex)
    {
    case cKbdCode_A: tKeyB = cKbdCode_LeftArrow; mSpecGui = true; mSpecCtrl = true; break;
    case cKbdCode_S: tKeyB = cKbdCode_RightArrow; mSpecGui = true; mSpecCtrl = true; break;
+   case cKbdCode_X: tKeyB = cKbdCode_Caps; break;
 
    case cKbdCode_D: mSpecCtrl = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
@@ -130,7 +131,6 @@ char KbdTransform::doTransformINReportKey(int aKeyIndex)
    case cKbdCode_M: tKeyB = cKbdCode_DownArrow; break;
    case cKbdCode_Comma: tKeyB = cKbdCode_PageUp; break;
    case cKbdCode_Period: tKeyB = cKbdCode_PageDown; break;
-   case cKbdCode_X: tKeyB = cKbdCode_Caps; break;
    }
    return tKeyB;
 }

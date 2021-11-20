@@ -1,0 +1,27 @@
+
+   A: Ctrl Gui LeftArrow
+   S: Ctrl Gui RightArrow
+   X: CapsLock
+
+   D: Ctrl
+   Space: Shift
+
+   W: Ctrl X
+   E: Ctrl C
+   R: Ctrl V
+
+   Y: Esc
+   U: UpArrow
+   I: Delete
+   O: Insert
+   P: Dash
+
+   H: Home
+   J: LeftArrow
+   K: RightArrow
+   L: End
+
+   N: Backspace
+   M: DownArrow
+   Comma: PageUp;
+   Period: PageDown
