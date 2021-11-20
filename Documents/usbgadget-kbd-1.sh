@@ -4,8 +4,8 @@ modprobe libcomposite
 
 pushd /sys/kernel/config/usb_gadget  # Put ourselves in the kernel configfs space
 
-mkdir -p kbdmodal_hidmouse
-cd kbdmodal_hidmouse
+mkdir -p kbdmodal_hidkbd
+cd kbdmodal_hidkbd
 
 echo 0x0200 > bcdUSB     # Complies with USB specification 2.0.0
 echo 0xFFFE > idVendor   # User specified--your company USB number here
@@ -15,9 +15,9 @@ echo 0x0100 > bcdDevice  # v1.0.0
 
 # String descriptors (configure these before you need them)
 mkdir -p strings/0x0409  # 0x0409 is the code for English
-echo "AAAAAAAA" > strings/0x0409/serialnumber
-echo "kbdmodal" > strings/0x0409/manufacturer
-echo "kbdmodal Keyboard Interface" > strings/0x0409/product
+echo "12345678-1" > strings/0x0409/serialnumber
+echo "chrishoen" > strings/0x0409/manufacturer
+echo "kbdmodal keyboard interface 1" > strings/0x0409/product
 
 # Configuration descriptor 1
 mkdir -p configs/c.1/strings/0x0409

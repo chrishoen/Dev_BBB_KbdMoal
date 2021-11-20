@@ -1,0 +1,16 @@
+[Unit]
+Description=kbdmodal proc
+After=multi-user.target
+
+[Service]
+RemainAfterExit=yes
+WorkingDirectory=/opt/prime
+Type=simple
+User=debian
+ExecStart=/usr/bin/screen -DmS kbdmodal -t kbdmodal /opt/prime/run-kbdmodal.sh
+ExecStop=/usr/bin/screen -S kbdmodal -X quit
+Restart=on-failure
+RestartSec=4
+
+[Install]
+WantedBy=multi-user.target
