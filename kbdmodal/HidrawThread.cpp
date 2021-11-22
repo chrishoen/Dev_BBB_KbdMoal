@@ -178,6 +178,9 @@ restart:
       //************************************************************************
       // Read report.
 
+      // IN report.
+      char tReportA[32];
+
       // Blocking poll for read or close.
       struct pollfd tPollFd[2];
       tPollFd[0].fd = mHidrawFd;
@@ -202,14 +205,14 @@ restart:
       }
 
       // Not closed, read a report record. 
-      tRet = read(mHidrawFd, tBuffer, 32);
+      tRet = read(mHidrawFd, tReportA, 32);
       if (tRet < 0)
       {
          perror("ERROR Hidraw read");
          goto restart;
       }
       printf("Hidraw <<<<<<<<< ");
-      for (int i = 0; i < tRet; i++) printf("%hhx ", tBuffer[i]);
+      for (int i = 0; i < tRet; i++) printf("%hhx ", tReportA[i]);
       printf("\n");
 
       //************************************************************************
@@ -224,7 +227,7 @@ restart:
 
       // Transform the read report to a write report.
       char tReportB[32];
-      gKbdTransform.doTransformINReport(tBuffer, tReportB);
+      gKbdTransform.doTransformINReport(tReportA, tReportB);
       printf("Hidraw           ");
       for (int i = 0; i < tRet; i++) printf("%hhx ", tReportB[i]);
       printf("\n");
