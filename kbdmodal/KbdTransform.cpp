@@ -40,41 +40,42 @@ void KbdTransform::reset()
 
 void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
 {
-   // Copy ReportA to SpecReport and perform capslock special mode logic.
-   doProcessINForSpecial(aReportA);
+   // Copy ReportA to SpecReport.
+   memcpy(mSpecReport, aReportA, 8);
 
-   // If normal mode then do identity transformation and return.
-   if (!mSpecMode)
+   // Examine SpecReport to determine the mode.
+   doProcessINForSpecial();
+
+   // If special mode then, transform the keycodes, remove zeros, 
+   // and set the modifier bits.
+   if (mSpecMode)
    {
-      memcpy(aReportB, aReportA, 8);
-      return;
+      // Transform SpecReport keycodes and set modifier flags.
+      for (int i = 2; i < 8; i++)
+      {
+         doTransformINReportKey(i);
+      }
+
+      // Remove zero keycodes from SpecReport.
+      doRemoveINReportZeroes();
+
+      // Set SpecReport modifier bits.
+      doTransformINReportModifier();
    }
 
-   // Apply function SpecReport->ReportB for keycodes.
-   memset(aReportB, 0, 8);
-   for (int i = 2; i < 8; i++)
-   {
-      aReportB[i] = doTransformINReportKey(i);
-   }
-   doRemoveINReportZeroes();
-
-   // Apply function SpecReport->ReportB for modifier bits.
-   aReportB[0] = doTransformINReportModifier();
+   // Copy SpecReport to ReportB.
+   memcpy(aReportB, mSpecReport, 8);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Transform an IN report. Copy ReportA to the member report and perform
-// caps lock special logic. Examine the key codes for caps lock to
-// determine the mode. Do not copy a caps lock key code to the member
-// report.
+// Examine SpecReport to determine the mode. If all of the bytes are
+// zero then set the mode to normal. If one of the keycodes is capslock
+// then set the mode to special. Reset the modifier flags.
 
-void KbdTransform::doProcessINForSpecial(const char* aReportA)
+void KbdTransform::doProcessINForSpecial()
 {
-   // Copy ReportA to SpecReport.
-   memcpy(mSpecReport, aReportA, 8);
-
    // Check for all zeroes.
    bool tAllZero = true;
    for (int i = 0; i < 8; i++)
@@ -83,7 +84,7 @@ void KbdTransform::doProcessINForSpecial(const char* aReportA)
    }
 
    // If all zeroes then set the mode to normal.
-   if (!tAllZero)
+   if (tAllZero)
    {
       mSpecMode = false;
    }
@@ -109,15 +110,14 @@ void KbdTransform::doProcessINForSpecial(const char* aReportA)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Transform an IN report key code byte.
-// Apply a function, KeyA->KeyB, that depends on the mode.
-// Return KeyB.
+// Transform a SpecReport keycode and set modifier flags.
 
-char KbdTransform::doTransformINReportKey(int aKeyIndex)
+void KbdTransform::doTransformINReportKey(int aKeyIndex)
 {
    char tKeyA = mSpecReport[aKeyIndex];
    char tKeyB = 0;
 
+   // KeyA->KeyB.
    switch (tKeyA)
    {
    case cKbdCode_A: tKeyB = cKbdCode_LeftArrow; mSpecGui = true; mSpecCtrl = true; break;
@@ -147,23 +147,36 @@ char KbdTransform::doTransformINReportKey(int aKeyIndex)
    case cKbdCode_Comma: tKeyB = cKbdCode_PageUp; break;
    case cKbdCode_Period: tKeyB = cKbdCode_PageDown; break;
    }
-   return tKeyB;
+
+   // Store KeyB.
+   mSpecReport[aKeyIndex] = tKeyB;
 }
 
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Remove empty zero key codes from member report.
+// Remove SpecReport zero key codes.
 
 void KbdTransform::doRemoveINReportZeroes()
 {
+   // Copy SpecReport to temp report.
+   char tReport[16];
+   memcpy(tReport, mSpecReport, 8);
+
+   // Set SpecReport keycodes to zero.
+   for (int i = 2; i < 8; i++)
+   {
+      mSpecReport[i] = 0;
+   }
+
+   // Copy temp report nonzero keycodes to SpecReport.
    int j = 2;
    for (int i = 2; i < 8; i++)
    {
-      if (mSpecReport[i])
+      if (tReport[i])
       {
-         mSpecReport[j++] = mSpecReport[i];
+         mSpecReport[j++] = tReport[i];
       }
    }
 }
@@ -171,11 +184,9 @@ void KbdTransform::doRemoveINReportZeroes()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Transform an IN report modifier byte.
-// Apply a function, ModifierA->ModifierB, that depends on the mode.
-// Return ModiferB.
+// OR the modifier flags into the SpecReport modifier byte.
 
-char KbdTransform::doTransformINReportModifier()
+void KbdTransform::doTransformINReportModifier()
 {
    char tModifierB = mSpecReport[0];
 
@@ -184,7 +195,7 @@ char KbdTransform::doTransformINReportModifier()
    if (mSpecGui) tModifierB |= cKbdMod_LGui;
    if (mSpecShift) tModifierB |= cKbdMod_LShift;
 
-   return tModifierB;
+   mSpecReport[0] = tModifierB;
 }
 
 //******************************************************************************

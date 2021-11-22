@@ -73,23 +73,24 @@ public:
    // The mode is changed by the caps lock key. 
    void doTransformINReport(const char* aReportA, char* aReportB);
 
-   // Transform an IN report. Copy ReportA to the member report and perform
-   // caps lock special logic. 
-   void doProcessINForSpecial(const char* aReportA);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
-   // Transform an IN report key code byte.
-   // Apply a function, KeyA->KeyB, that depends on the mode.
-   // Return KeyB.
-   char doTransformINReportKey(int aKeyIndex);
+   // Examine SpecReport to determine the mode. If all of the bytes are
+   // zero then set the mode to normal. If one of the keycodes is capslock
+   // then set the mode to special. Reset the modifier flags.
+   void doProcessINForSpecial();
 
-   // Remove empty zero key codes from member report.
+   // Transform a SpecReport keycode and set modifier flags.
+   void doTransformINReportKey(int aKeyIndex);
+
+   // Remove SpecReport zero key codes.
    void doRemoveINReportZeroes();
 
-   // Transform an IN report modifier byte.
-   // Apply a function, ModifierA->ModifierB, that depends on the mode.
-   // Return ModiferB.
-   char doTransformINReportModifier();
-
+   // OR the modifier flags into the SpecReport modifier byte.
+   void doTransformINReportModifier();
 };
 
 //******************************************************************************
