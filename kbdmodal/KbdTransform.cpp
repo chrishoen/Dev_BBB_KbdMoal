@@ -40,14 +40,17 @@ void KbdTransform::reset()
 
 void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
 {
+   // Copy ReportA to SpecReport and perform capslock special mode logic.
    doProcessINForSpecial(aReportA);
 
+   // If normal mode then do identity transformation and return.
    if (!mSpecMode)
    {
       memcpy(aReportB, aReportA, 8);
       return;
    }
 
+   // Apply function SpecReport->ReportB for keycodes.
    memset(aReportB, 0, 8);
    for (int i = 2; i < 8; i++)
    {
@@ -55,6 +58,7 @@ void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
    }
    doRemoveINReportZeroes();
 
+   // Apply function SpecReport->ReportB for modifier bits.
    aReportB[0] = doTransformINReportModifier();
 }
 
@@ -68,23 +72,34 @@ void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
 
 void KbdTransform::doProcessINForSpecial(const char* aReportA)
 {
-   memset(mSpecReport, 0, 8);
-   mSpecReport[0] = aReportA[0];
+   // Copy ReportA to SpecReport.
+   memcpy(mSpecReport, aReportA, 8);
 
-   mSpecMode = false;
+   // Check for all zeroes.
+   bool tAllZero = true;
+   for (int i = 0; i < 8; i++)
+   {
+      if (mSpecReport[i]) tAllZero = false;
+   }
 
-   int j = 2;
+   // If all zeroes then set the mode to normal.
+   if (!tAllZero)
+   {
+      mSpecMode = false;
+   }
+
+   // Check the keycodes for capslock. If there is a capslock then
+   // set the mode to special and zero the keycode to ignore it.
    for (int i = 2; i < 8; i++)
    {
-      if (aReportA[i] == cKbdCode_Caps)
+      if (mSpecReport[i] == cKbdCode_Caps)
       {
          mSpecMode = true;
-      }
-      else
-      {
-         mSpecReport[j++] = aReportA[i];
+         mSpecReport[i] = 0;
       }
    }
+
+   // Reset the modifier flags.
    mSpecCtrl = false;
    mSpecAlt = false;
    mSpecGui = false;
