@@ -12,46 +12,6 @@ my_init_global_import_variables()
 add_subdirectory ("kbdmodal")
 return()
 
-add_subdirectory ("hid-sample1")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("ExampleThread1")
 add_subdirectory ("Test")
 return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoUdp")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("ExampleThread1")
-add_subdirectory ("ExampleThread2")
-add_subdirectory ("ExampleThread3")
-add_subdirectory ("ProtoTcpClient")
-add_subdirectory ("ProtoTcpServer")
-add_subdirectory ("ProtoUdp")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("ExampleThread1")
-add_subdirectory ("ExampleThread2")
-add_subdirectory ("ExampleThread3")
-add_subdirectory ("ProtoTcpClient")
-add_subdirectory ("ProtoTcpServer")
-add_subdirectory ("ProtoUdp")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("ProtoUdp")
-return()
-
-add_subdirectory ("CommonLib")
-add_subdirectory ("ExampleThread1")
-add_subdirectory ("ExampleThread2")
-add_subdirectory ("ExampleThread3")
-add_subdirectory ("Test")
-return()
-
-
 
