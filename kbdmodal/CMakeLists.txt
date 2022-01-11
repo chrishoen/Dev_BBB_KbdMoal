@@ -13,5 +13,5 @@ my_lib_import_RisLib(kbdmodal)
 add_custom_command(
   TARGET  kbdmodal
   POST_BUILD
-  COMMAND rsync -azv --chmod=ugo=rwx kbdmodal rsync://debian@devtgt/prime/bin
+  COMMAND rsync -azv --chmod=ugo=rwx kbdmodal rsync://debian@bbkbd/prime/bin
   WORKING_DIRECTORY C:/Users/$ENV{username}/CMakeBuilds/Dev_BBB_KbdModal/kbdmodal)
