@@ -1,19 +1,24 @@
 ﻿{
    "configurations": [
       {
-         "name": "Dev_BBB_KbdModal",
-         "inheritEnvironments": [ "linux_arm" ],
-         "environments": [ { "INCLUDE": "c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\8;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include\\c++\\8\\backward;c:\\beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\8\\include;c:\\beagle\\toolchain\\lib\\gcc\\arm-linux-gnueabihf\\8\\include-fixed;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\include\\arm-linux-gnueabihf\\c++\\8;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\sysroot\\usr\\include\\arm-linux-gnueabihf;c:\\beagle\\toolchain\\arm-linux-gnueabihf\\sysroot\\usr\\include;" } ],
+         "name": "beagle",
          "generator": "Ninja",
          "configurationType": "Release",
-         "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}",
-         "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${name}\\install",
+         "buildRoot": "${projectDir}\\out\\build\\${name}",
+         "installRoot": "${projectDir}\\out\\install\\${name}",
          "cmakeCommandArgs": "",
-         "buildCommandArgs": "-v -j8",
+         "buildCommandArgs": "",
          "ctestCommandArgs": "",
+         "inheritEnvironments": [ "linux-arm" ],
          "intelliSenseMode": "linux-gcc-arm",
-         "cmakeToolchain": "MyBeagleToolchain.cmake",
-         "variables": []
+         "cmakeToolchain": "${projectDir}\\MyBeagleToolchain.cmake",
+         "variables": [
+            {
+               "name": "MYMODE",
+               "value": "beagle",
+               "type": "STRING"
+            }
+         ]
       }
    ]
 }
