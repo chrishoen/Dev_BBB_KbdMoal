@@ -10,4 +10,4 @@ my_inc_import_RisLib(${project})
 my_lib_import_RisLib(${project})
 
 install(CODE "execute_process(COMMAND_ECHO STDOUT
-   COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/${project} debian@bbkbd:/opt/prime/bin)")
+   COMMAND c:/windows/system32/openssh/scp ${CMAKE_CURRENT_BINARY_DIR}/${project} debian@bbkbd:/opt/prime/stage)")

@@ -23,7 +23,7 @@ KbdTransform::KbdTransform()
 
 void KbdTransform::reset()
 {
-   mSpecMode = false;
+   mSpecMode = 0;
    mSpecCtrl = false;
    mSpecAlt = false;
    mSpecGui = false;
@@ -53,7 +53,14 @@ void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
       // Transform SpecReport keycodes and set modifier flags.
       for (int i = 2; i < 8; i++)
       {
-         doTransformINReportKey(i);
+         if (mSpecMode == 1)
+         {
+            doTransformINReportKey1(i);
+         }
+         else if (mSpecMode == 2)
+         {
+            doTransformINReportKey2(i);
+         }
       }
 
       // Remove zero keycodes from SpecReport.
@@ -86,7 +93,7 @@ void KbdTransform::doProcessINForSpecial()
    // If all zeroes then set the mode to normal.
    if (tAllZero)
    {
-      mSpecMode = false;
+      mSpecMode = 0;
    }
 
    // Check the keycodes for capslock. If there is a capslock then
@@ -95,9 +102,17 @@ void KbdTransform::doProcessINForSpecial()
    {
       if (mSpecReport[i] == cKbdCode_Caps)
       {
-         mSpecMode = true;
+         mSpecMode = 1;
          mSpecReport[i] = 0;
       }
+   }
+
+   // Check the first keycode for left alt. If there is a left alt
+   // then set the mode to special and zero the keycode to ignore it.
+   if (mSpecReport[0] & cKbdMod_LAlt)
+   {
+      mSpecMode = 2;
+      mSpecReport[0] &= ~cKbdMod_LAlt;
    }
 
    // Reset the modifier flags.
@@ -112,7 +127,7 @@ void KbdTransform::doProcessINForSpecial()
 //******************************************************************************
 // Transform a SpecReport keycode and set modifier flags.
 
-void KbdTransform::doTransformINReportKey(int aKeyIndex)
+void KbdTransform::doTransformINReportKey1(int aKeyIndex)
 {
    char tKeyA = mSpecReport[aKeyIndex];
    char tKeyB = 0;
@@ -122,8 +137,7 @@ void KbdTransform::doTransformINReportKey(int aKeyIndex)
    {
    case cKbdCode_A: tKeyB = cKbdCode_LeftArrow; mSpecGui = true; mSpecCtrl = true; break;
    case cKbdCode_S: tKeyB = cKbdCode_RightArrow; mSpecGui = true; mSpecCtrl = true; break;
-   case cKbdCode_X: tKeyB = cKbdCode_Insert; break;
-   case cKbdCode_C: tKeyB = cKbdCode_Caps; break;
+   case cKbdCode_X: tKeyB = cKbdCode_Caps; break;
 
    case cKbdCode_D: mSpecCtrl = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
@@ -135,18 +149,52 @@ void KbdTransform::doTransformINReportKey(int aKeyIndex)
    case cKbdCode_Y: tKeyB = cKbdCode_Esc; break;
    case cKbdCode_U: tKeyB = cKbdCode_UpArrow; break;
    case cKbdCode_I: tKeyB = cKbdCode_Delete; break;
-   case cKbdCode_O: tKeyB = cKbdCode_Dash; break;
-   case cKbdCode_P: tKeyB = cKbdCode_Dash; mSpecShift = true; break;
+   case cKbdCode_O: tKeyB = cKbdCode_8; mSpecShift = true; break;
 
    case cKbdCode_H: tKeyB = cKbdCode_Home; break;
    case cKbdCode_J: tKeyB = cKbdCode_LeftArrow; break;
    case cKbdCode_K: tKeyB = cKbdCode_RightArrow; break;
    case cKbdCode_L: tKeyB = cKbdCode_End; break;
+   case cKbdCode_Semi: tKeyB = cKbdCode_Minus; break;
+   case cKbdCode_Quote: tKeyB = cKbdCode_Minus; mSpecShift = true; break;
 
    case cKbdCode_N: tKeyB = cKbdCode_Backspace; break;
    case cKbdCode_M: tKeyB = cKbdCode_DownArrow; break;
    case cKbdCode_Comma: tKeyB = cKbdCode_PageUp; break;
    case cKbdCode_Period: tKeyB = cKbdCode_PageDown; break;
+
+   case cKbdCode_LinSlash: tKeyB = cKbdCode_WinSlash; break;
+   }
+
+   // Store KeyB.
+   mSpecReport[aKeyIndex] = tKeyB;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Transform a SpecReport keycode and set modifier flags.
+
+void KbdTransform::doTransformINReportKey2(int aKeyIndex)
+{
+   char tKeyA = mSpecReport[aKeyIndex];
+   char tKeyB = 0;
+
+   // KeyA->KeyB.
+   switch (tKeyA)
+   {
+   case cKbdCode_U: tKeyB = cKbdCode_1; break;
+   case cKbdCode_I: tKeyB = cKbdCode_2; break;
+   case cKbdCode_O: tKeyB = cKbdCode_3; break;
+   case cKbdCode_P: tKeyB = cKbdCode_4; break;
+
+   case cKbdCode_J: tKeyB = cKbdCode_5; break;
+   case cKbdCode_K: tKeyB = cKbdCode_6; break;
+   case cKbdCode_L: tKeyB = cKbdCode_7; break;
+   case cKbdCode_Semi: tKeyB = cKbdCode_8; break;
+
+   case cKbdCode_N: tKeyB = cKbdCode_0; break;
+   case cKbdCode_M: tKeyB = cKbdCode_9; break;
    }
 
    // Store KeyB.

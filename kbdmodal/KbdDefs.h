@@ -80,13 +80,39 @@ static const int cKbdCode_PageDown = 0x4e;
 
 static const int cKbdCode_Esc = 0x29;
 static const int cKbdCode_Delete = 0x4c;
-static const int cKbdCode_Insert = 0x49;
 static const int cKbdCode_Backspace = 0x2a;
-static const int cKbdCode_Dash = 0x2d;
+static const int cKbdCode_Minus = 0x2d;
 
 static const int cKbdCode_X = 0x1b;
 static const int cKbdCode_C = 0x06;
 static const int cKbdCode_V = 0x19;
+
+static const int cKbdCode_0 = 0x27;
+static const int cKbdCode_1 = 0x1e;
+static const int cKbdCode_2 = 0x1f;
+static const int cKbdCode_3 = 0x20;
+static const int cKbdCode_4 = 0x21;
+static const int cKbdCode_5 = 0x22;
+static const int cKbdCode_6 = 0x23;
+static const int cKbdCode_7 = 0x24;
+static const int cKbdCode_8 = 0x25;
+static const int cKbdCode_9 = 0x26;
+
+static const int cKbdCode_Semi = 0x33;
+static const int cKbdCode_Quote = 0x34;
+
+static const int cKbdCode_WinSlash = 0x31;
+static const int cKbdCode_LinSlash = 0x38;
+
+
+
+
+
+
+
+
+
+
 
 //******************************************************************************
 //******************************************************************************

@@ -43,7 +43,8 @@ public:
 
    // If false then the mode is normal. If true then the mode is special.
    // The mode is special when the caps lock key is pressed.
-   bool mSpecMode;
+   // 0 is normal, 1 is caps lock pressed, 2 is left alt presses.
+   int mSpecMode;
 
    // If true then set the ReportB modifier control, alt, shift bits.
    bool mSpecCtrl;
@@ -84,7 +85,8 @@ public:
    void doProcessINForSpecial();
 
    // Transform a SpecReport keycode and set modifier flags.
-   void doTransformINReportKey(int aKeyIndex);
+   void doTransformINReportKey1(int aKeyIndex);
+   void doTransformINReportKey2(int aKeyIndex);
 
    // Remove SpecReport zero key codes.
    void doRemoveINReportZeroes();
