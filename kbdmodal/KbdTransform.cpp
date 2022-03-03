@@ -61,6 +61,10 @@ void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
          {
             doTransformINReportKey2(i);
          }
+         else if (mSpecMode == 3)
+         {
+            doTransformINReportKey2(i);
+         }
       }
 
       // Remove zero keycodes from SpecReport.
@@ -105,13 +109,18 @@ void KbdTransform::doProcessINForSpecial()
          mSpecMode = 1;
          mSpecReport[i] = 0;
       }
+      if (mSpecReport[i] == cKbdCode_Tab)
+      {
+         mSpecMode = 2;
+         mSpecReport[i] = 0;
+      }
    }
 
    // Check the first keycode for left alt. If there is a left alt
    // then set the mode to special and zero the keycode to ignore it.
    if (mSpecReport[0] & cKbdMod_LAlt)
    {
-      mSpecMode = 2;
+      mSpecMode = 3;
       mSpecReport[0] &= ~cKbdMod_LAlt;
    }
 
@@ -135,11 +144,13 @@ void KbdTransform::doTransformINReportKey1(int aKeyIndex)
    // KeyA->KeyB.
    switch (tKeyA)
    {
-   case cKbdCode_A: tKeyB = cKbdCode_LeftArrow; mSpecGui = true; mSpecCtrl = true; break;
-   case cKbdCode_S: tKeyB = cKbdCode_RightArrow; mSpecGui = true; mSpecCtrl = true; break;
+// case cKbdCode_A: tKeyB = cKbdCode_LeftArrow; mSpecGui = true; mSpecCtrl = true; break;
+// case cKbdCode_S: tKeyB = cKbdCode_RightArrow; mSpecGui = true; mSpecCtrl = true; break;
    case cKbdCode_X: tKeyB = cKbdCode_Caps; break;
 
-   case cKbdCode_D: mSpecCtrl = true; break;
+   case cKbdCode_S: tKeyB = cKbdCode_Tab;  mSpecShift = true; break;
+   case cKbdCode_D: tKeyB = cKbdCode_Tab; break;
+   case cKbdCode_F: mSpecCtrl = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
 
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;

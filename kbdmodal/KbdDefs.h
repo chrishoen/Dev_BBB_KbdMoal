@@ -44,6 +44,7 @@ static const char cKbdLed_Caps = 0x02;
 
 static const int cKbdCode_Caps = 0x39;
 static const int cKbdCode_Space = 0x2c;
+static const int cKbdCode_Tab = 0x2b;
 
 static const int cKbdCode_W = 0x1a;
 static const int cKbdCode_E = 0x08;
@@ -58,6 +59,7 @@ static const int cKbdCode_P = 0x13;
 static const int cKbdCode_A = 0x04;
 static const int cKbdCode_S = 0x16;
 static const int cKbdCode_D = 0x07;
+static const int cKbdCode_F = 0x09;
 
 static const int cKbdCode_H = 0x0b;
 static const int cKbdCode_J = 0x0d;
