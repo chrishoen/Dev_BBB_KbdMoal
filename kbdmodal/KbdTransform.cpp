@@ -109,11 +109,6 @@ void KbdTransform::doProcessINForSpecial()
          mSpecMode = 1;
          mSpecReport[i] = 0;
       }
-      if (mSpecReport[i] == cKbdCode_Tab)
-      {
-         mSpecMode = 2;
-         mSpecReport[i] = 0;
-      }
    }
 
    // Check the first keycode for left alt. If there is a left alt
@@ -144,12 +139,8 @@ void KbdTransform::doTransformINReportKey1(int aKeyIndex)
    // KeyA->KeyB.
    switch (tKeyA)
    {
-// case cKbdCode_A: tKeyB = cKbdCode_LeftArrow; mSpecGui = true; mSpecCtrl = true; break;
-// case cKbdCode_S: tKeyB = cKbdCode_RightArrow; mSpecGui = true; mSpecCtrl = true; break;
    case cKbdCode_X: tKeyB = cKbdCode_Caps; break;
 
-   case cKbdCode_S: tKeyB = cKbdCode_Tab;  mSpecShift = true; break;
-   case cKbdCode_D: tKeyB = cKbdCode_Tab; break;
    case cKbdCode_F: mSpecCtrl = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
 
