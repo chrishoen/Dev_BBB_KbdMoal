@@ -24,6 +24,9 @@ KbdTransform::KbdTransform()
 void KbdTransform::reset()
 {
    mSpecMode = 0;
+   mCapsFlag = false;
+   mLAltFlag = false;
+
    mSpecCtrl = false;
    mSpecAlt = false;
    mSpecGui = false;
@@ -63,7 +66,7 @@ void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
          }
          else if (mSpecMode == 3)
          {
-            doTransformINReportKey2(i);
+            doTransformINReportKey3(i);
          }
       }
 
@@ -97,27 +100,35 @@ void KbdTransform::doProcessINForSpecial()
    // If all zeroes then set the mode to normal.
    if (tAllZero)
    {
-      mSpecMode = 0;
+      mCapsFlag = false;
+      mLAltFlag = false;
    }
 
    // Check the keycodes for capslock. If there is a capslock then
    // set the mode to special and zero the keycode to ignore it.
+   mCapsFlag = false;
    for (int i = 2; i < 8; i++)
    {
       if (mSpecReport[i] == cKbdCode_Caps)
       {
-         mSpecMode = 1;
+         mCapsFlag = true;
          mSpecReport[i] = 0;
       }
    }
 
    // Check the first keycode for left alt. If there is a left alt
    // then set the mode to special and zero the keycode to ignore it.
+   mLAltFlag = false;
    if (mSpecReport[0] & cKbdMod_LAlt)
    {
-      mSpecMode = 3;
+      mLAltFlag = true;
       mSpecReport[0] &= ~cKbdMod_LAlt;
    }
+
+   mSpecMode = 0;
+   if ( mCapsFlag && !mLAltFlag) mSpecMode = 1;
+   if (!mCapsFlag && mLAltFlag)  mSpecMode = 2;
+   if ( mCapsFlag && mLAltFlag)  mSpecMode = 3;
 
    // Reset the modifier flags.
    mSpecCtrl = false;
@@ -197,6 +208,33 @@ void KbdTransform::doTransformINReportKey2(int aKeyIndex)
 
    case cKbdCode_N: tKeyB = cKbdCode_0; break;
    case cKbdCode_M: tKeyB = cKbdCode_9; break;
+   }
+
+   // Store KeyB.
+   mSpecReport[aKeyIndex] = tKeyB;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Transform a SpecReport keycode and set modifier flags.
+
+void KbdTransform::doTransformINReportKey3(int aKeyIndex)
+{
+   char tKeyA = mSpecReport[aKeyIndex];
+   char tKeyB = 0;
+
+   // KeyA->KeyB.
+   switch (tKeyA)
+   {
+   case cKbdCode_U: tKeyB = cKbdCode_LArray;  mSpecShift = true; break;
+   case cKbdCode_I: tKeyB = cKbdCode_RArray;  mSpecShift = true; break;
+
+   case cKbdCode_J: tKeyB = cKbdCode_9; mSpecShift = true; break;
+   case cKbdCode_K: tKeyB = cKbdCode_0; mSpecShift = true; break;
+
+   case cKbdCode_M: tKeyB = cKbdCode_LArray; break;
+   case cKbdCode_Comma: tKeyB = cKbdCode_RArray; break;
    }
 
    // Store KeyB.

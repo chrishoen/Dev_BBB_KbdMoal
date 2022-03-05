@@ -106,15 +106,8 @@ static const int cKbdCode_Quote = 0x34;
 static const int cKbdCode_WinSlash = 0x31;
 static const int cKbdCode_LinSlash = 0x38;
 
-
-
-
-
-
-
-
-
-
+static const int cKbdCode_LArray = 0x2f;
+static const int cKbdCode_RArray = 0x30;
 
 //******************************************************************************
 //******************************************************************************

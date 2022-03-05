@@ -41,6 +41,12 @@ public:
    //***************************************************************************
    // Members.
 
+   // If true then the caps lock is pressed.
+   bool mCapsFlag;
+
+   // If true then the left altis pressed.
+   bool mLAltFlag;
+
    // If false then the mode is normal. If true then the mode is special.
    // The mode is special when the caps lock key is pressed.
    // 0 is normal, 1 is caps lock pressed, 2 is left alt presses.
@@ -87,6 +93,7 @@ public:
    // Transform a SpecReport keycode and set modifier flags.
    void doTransformINReportKey1(int aKeyIndex);
    void doTransformINReportKey2(int aKeyIndex);
+   void doTransformINReportKey3(int aKeyIndex);
 
    // Remove SpecReport zero key codes.
    void doRemoveINReportZeroes();
