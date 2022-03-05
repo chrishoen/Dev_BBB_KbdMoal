@@ -106,7 +106,6 @@ void KbdTransform::doProcessINForSpecial()
 
    // Check the keycodes for capslock. If there is a capslock then
    // set the mode to special and zero the keycode to ignore it.
-   mCapsFlag = false;
    for (int i = 2; i < 8; i++)
    {
       if (mSpecReport[i] == cKbdCode_Caps)
@@ -118,7 +117,6 @@ void KbdTransform::doProcessINForSpecial()
 
    // Check the first keycode for left alt. If there is a left alt
    // then set the mode to special and zero the keycode to ignore it.
-   mLAltFlag = false;
    if (mSpecReport[0] & cKbdMod_LAlt)
    {
       mLAltFlag = true;
