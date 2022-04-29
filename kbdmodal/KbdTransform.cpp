@@ -153,6 +153,8 @@ void KbdTransform::doTransformINReportKey1(int aKeyIndex)
    case cKbdCode_F: mSpecCtrl = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
 
+   case cKbdCode_D: tKeyB = cKbdCode_A; mSpecCtrl = true; break;
+
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;
    case cKbdCode_E: tKeyB = cKbdCode_C; mSpecCtrl = true; break;
    case cKbdCode_R: tKeyB = cKbdCode_V; mSpecCtrl = true; break;
@@ -240,6 +242,12 @@ void KbdTransform::doTransformINReportKey3(int aKeyIndex)
 
    case cKbdCode_L: tKeyB = cKbdCode_Equal; break;
    case cKbdCode_Semi: tKeyB = cKbdCode_Equal; mSpecShift = true; break;
+
+   case cKbdCode_O: tKeyB = cKbdCode_5;   mSpecShift = true; break;
+   case cKbdCode_P: tKeyB = cKbdCode_3;   mSpecShift = true; break;
+
+   case cKbdCode_Period: tKeyB = cKbdCode_2;   mSpecShift = true; break;
+   case cKbdCode_LinSlash: tKeyB = cKbdCode_4;   mSpecShift = true; break;
    }
 
    // Store KeyB.
