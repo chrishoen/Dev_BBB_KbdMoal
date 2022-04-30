@@ -31,6 +31,7 @@ void KbdTransform::reset()
    mSpecAlt = false;
    mSpecGui = false;
    mSpecShift = false;
+   mSpecCtrlNext = false;
    memset(mSpecReport, 0, 8);
 }
 
@@ -76,6 +77,9 @@ void KbdTransform::doTransformINReport(const char* aReportA, char* aReportB)
       // Set SpecReport modifier bits.
       doTransformINReportModifier();
    }
+
+   // Process SpecReport for special ctrl states.
+   doProcessReportForSpecialCtrl();
 
    // Copy SpecReport to ReportB.
    memcpy(aReportB, mSpecReport, 8);
@@ -123,6 +127,7 @@ void KbdTransform::doProcessINForSpecial()
       mSpecReport[0] &= ~cKbdMod_LAlt;
    }
 
+   // Set the mode from the flags. 
    mSpecMode = 0;
    if ( mCapsFlag && !mLAltFlag) mSpecMode = 1;
    if (!mCapsFlag && mLAltFlag)  mSpecMode = 2;
@@ -133,6 +138,13 @@ void KbdTransform::doProcessINForSpecial()
    mSpecAlt = false;
    mSpecGui = false;
    mSpecShift = false;
+
+   // If SpecCtrlSX was set by the last key then set ctrl true.
+   if (mSpecCtrlNext && !tAllZero && false)
+   {
+      mSpecCtrlNext = false;
+      mSpecCtrl = true;
+   }
 }
 
 //******************************************************************************
@@ -153,7 +165,8 @@ void KbdTransform::doTransformINReportKey1(int aKeyIndex)
    case cKbdCode_F: mSpecCtrl = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
 
-   case cKbdCode_D: tKeyB = cKbdCode_A; mSpecCtrl = true; break;
+// case cKbdCode_D: tKeyB = cKbdCode_A; mSpecCtrl = true; break;
+   case cKbdCode_D: mSpecCtrlNext = true; break;
 
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;
    case cKbdCode_E: tKeyB = cKbdCode_C; mSpecCtrl = true; break;
@@ -240,8 +253,8 @@ void KbdTransform::doTransformINReportKey3(int aKeyIndex)
    case cKbdCode_M: tKeyB = cKbdCode_LArray; break;
    case cKbdCode_Comma: tKeyB = cKbdCode_RArray; break;
 
-   case cKbdCode_L: tKeyB = cKbdCode_Equal; break;
-   case cKbdCode_Semi: tKeyB = cKbdCode_Equal; mSpecShift = true; break;
+   case cKbdCode_L: tKeyB = cKbdCode_Equal; mSpecShift = true; break;
+   case cKbdCode_Semi: tKeyB = cKbdCode_Equal; break;
 
    case cKbdCode_O: tKeyB = cKbdCode_5;   mSpecShift = true; break;
    case cKbdCode_P: tKeyB = cKbdCode_3;   mSpecShift = true; break;
@@ -298,6 +311,28 @@ void KbdTransform::doTransformINReportModifier()
    if (mSpecShift) tModifierB |= cKbdMod_LShift;
 
    mSpecReport[0] = tModifierB;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Process SpecReport for special ctrl states.
+
+void KbdTransform::doProcessReportForSpecialCtrl()
+{
+   // Check for all zeroes.
+   bool tAllZero = true;
+   for (int i = 2; i < 8; i++)
+   {
+      if (mSpecReport[i]) tAllZero = false;
+   }
+
+   // If SpecCtrlSX was set by the last key then set ctrl true.
+   if (mSpecCtrlNext && !tAllZero)
+   {
+      mSpecCtrlNext = false;
+      mSpecReport[0] |= cKbdMod_LCtrl;
+   }
 }
 
 //******************************************************************************

@@ -58,6 +58,9 @@ public:
    bool mSpecGui;
    bool mSpecShift;
 
+   // If true then the ctrl will be added to the next key.
+   bool mSpecCtrlNext;
+
    // Intermediate temporary report.
    char mSpecReport[16];
 
@@ -97,6 +100,9 @@ public:
 
    // Remove SpecReport zero key codes.
    void doRemoveINReportZeroes();
+
+   // Process SpecReport for special ctrl states.
+   void doProcessReportForSpecialCtrl();
 
    // OR the modifier flags into the SpecReport modifier byte.
    void doTransformINReportModifier();
