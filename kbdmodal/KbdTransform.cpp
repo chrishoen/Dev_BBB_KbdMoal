@@ -168,7 +168,6 @@ void KbdTransform::doTransformINReportKey1(int aKeyIndex)
    case cKbdCode_F: mSpecCtrl = true; break;
    case cKbdCode_Space: mSpecShift = true; break;
 
-// case cKbdCode_D: tKeyB = cKbdCode_A; mSpecCtrl = true; break;
    case cKbdCode_D: mSpecCtrlNext = true; break;
 
    case cKbdCode_W: tKeyB = cKbdCode_X; mSpecCtrl = true; break;
