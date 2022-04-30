@@ -105,7 +105,6 @@ void KbdTransform::doProcessINForSpecial()
    if (tAllZero)
    {
       mCapsFlag = false;
-      mLAltFlag = false;
    }
 
    // Check the keycodes for capslock. If there is a capslock then
@@ -119,12 +118,16 @@ void KbdTransform::doProcessINForSpecial()
       }
    }
 
-   // Check the first keycode for left alt. If there is a left alt
-   // then set the mode to special and zero the keycode to ignore it.
+   // Check the modifier keycode for left alt. If there is a left alt
+   // then set the mode to special and mask the keycode to ignore it.
    if (mSpecReport[0] & cKbdMod_LAlt)
    {
       mLAltFlag = true;
       mSpecReport[0] &= ~cKbdMod_LAlt;
+   }
+   else
+   {
+      mLAltFlag = false;
    }
 
    // Set the mode from the flags. 
@@ -321,14 +324,14 @@ void KbdTransform::doTransformINReportModifier()
 void KbdTransform::doProcessReportForSpecialCtrl()
 {
    // Check for all zeroes.
-   bool tAllZero = true;
+   bool tAllKeyZero = true;
    for (int i = 2; i < 8; i++)
    {
-      if (mSpecReport[i]) tAllZero = false;
+      if (mSpecReport[i]) tAllKeyZero = false;
    }
 
    // If SpecCtrlSX was set by the last key then set ctrl true.
-   if (mSpecCtrlNext && !tAllZero)
+   if (mSpecCtrlNext && !tAllKeyZero)
    {
       mSpecCtrlNext = false;
       mSpecReport[0] |= cKbdMod_LCtrl;
