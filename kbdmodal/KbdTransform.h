@@ -55,8 +55,15 @@ public:
    // If true then set the ReportB modifier control, alt, shift bits.
    bool mSpecCtrl;
    bool mSpecAlt;
-   bool mSpecGui;
    bool mSpecShift;
+
+   // Previous values of the above flags.
+   bool mLastSpecCtrl;
+   bool mLastSpecAlt;
+   bool mLastSpecShift;
+
+   // If true then some of the special flags changed.
+   bool mSpecChangeFlag;
 
    // If true then the ctrl will be added to the next key.
    bool mSpecCtrlNext;

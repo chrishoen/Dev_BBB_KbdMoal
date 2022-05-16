@@ -29,8 +29,11 @@ void KbdTransform::reset()
 
    mSpecCtrl = false;
    mSpecAlt = false;
-   mSpecGui = false;
    mSpecShift = false;
+   mLastSpecCtrl = false;
+   mLastSpecAlt = false;
+   mLastSpecShift = false;
+   mSpecChangeFlag = false;
    mSpecCtrlNext = false;
    memset(mSpecReport, 0, 8);
 }
@@ -132,14 +135,13 @@ void KbdTransform::doProcessINForSpecial()
 
    // Set the mode from the flags. 
    mSpecMode = 0;
-   if ( mCapsFlag && !mLAltFlag) mSpecMode = 1;
+   if (mCapsFlag && !mLAltFlag) mSpecMode = 1;
    if (!mCapsFlag && mLAltFlag)  mSpecMode = 2;
-   if ( mCapsFlag && mLAltFlag)  mSpecMode = 3;
+   if (mCapsFlag && mLAltFlag)  mSpecMode = 3;
 
    // Reset the modifier flags.
    mSpecCtrl = false;
    mSpecAlt = false;
-   mSpecGui = false;
    mSpecShift = false;
 
    // If SpecCtrlSX was set by the last key then set ctrl true.
@@ -147,6 +149,30 @@ void KbdTransform::doProcessINForSpecial()
    {
       mSpecCtrlNext = false;
       mSpecCtrl = true;
+   }
+
+   // Set the special change flag.
+   mSpecChangeFlag = false;
+   if (mLastSpecCtrl != mSpecCtrl) mSpecChangeFlag = true;
+   if (mLastSpecAlt != mSpecAlt) mSpecChangeFlag = true;
+   if (mLastSpecShift != mSpecShift) mSpecChangeFlag = true;
+
+   // Set the special last flags.
+   mLastSpecCtrl = mSpecCtrl;
+   mLastSpecAlt = mSpecAlt;
+   mLastSpecShift = mSpecShift;
+
+   // If the special change flag if true then and zero the
+   // keycode to ignore it.
+   if (mSpecChangeFlag)
+   {
+      for (int i = 2; i < 8; i++)
+      {
+         if (mSpecReport[i] != cKbdCode_Enter)
+         {
+            mSpecReport[i] = 0;
+         }
+      }
    }
 }
 
@@ -163,6 +189,7 @@ void KbdTransform::doTransformINReportKey1(int aKeyIndex)
    // KeyA->KeyB.
    switch (tKeyA)
    {
+   case cKbdCode_Enter: tKeyB = cKbdCode_Enter; break;
    case cKbdCode_X: tKeyB = cKbdCode_Caps; break;
 
    case cKbdCode_F: mSpecCtrl = true; break;
@@ -211,6 +238,8 @@ void KbdTransform::doTransformINReportKey2(int aKeyIndex)
    // KeyA->KeyB.
    switch (tKeyA)
    {
+   case cKbdCode_Enter: tKeyB = cKbdCode_Enter; break;
+
    case cKbdCode_U: tKeyB = cKbdCode_1; break;
    case cKbdCode_I: tKeyB = cKbdCode_2; break;
    case cKbdCode_O: tKeyB = cKbdCode_3; break;
@@ -246,6 +275,8 @@ void KbdTransform::doTransformINReportKey3(int aKeyIndex)
    // KeyA->KeyB.
    switch (tKeyA)
    {
+   case cKbdCode_Enter: tKeyB = cKbdCode_Enter; break;
+
    case cKbdCode_U: tKeyB = cKbdCode_LArray;  mSpecShift = true; break;
    case cKbdCode_I: tKeyB = cKbdCode_RArray;  mSpecShift = true; break;
 
@@ -309,7 +340,6 @@ void KbdTransform::doTransformINReportModifier()
 
    if (mSpecAlt) tModifierB |= cKbdMod_LAlt;
    if (mSpecCtrl) tModifierB |= cKbdMod_LCtrl;
-   if (mSpecGui) tModifierB |= cKbdMod_LGui;
    if (mSpecShift) tModifierB |= cKbdMod_LShift;
 
    mSpecReport[0] = tModifierB;
