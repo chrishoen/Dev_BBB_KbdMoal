@@ -53,6 +53,7 @@ Mode 3
    K: )
    L: +
    Semi: =
+   Quote: GraveAccent ~
 
    M: [
    Comma: ] 

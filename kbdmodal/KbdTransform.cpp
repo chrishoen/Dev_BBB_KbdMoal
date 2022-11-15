@@ -288,6 +288,7 @@ void KbdTransform::doTransformINReportKey3(int aKeyIndex)
 
    case cKbdCode_L: tKeyB = cKbdCode_Equal; mSpecShift = true; break;
    case cKbdCode_Semi: tKeyB = cKbdCode_Equal; break;
+   case cKbdCode_Quote: tKeyB = cKbdCode_GraveAccent; mSpecShift = true; break;
 
    case cKbdCode_O: tKeyB = cKbdCode_5;   mSpecShift = true; break;
    case cKbdCode_P: tKeyB = cKbdCode_3;   mSpecShift = true; break;
